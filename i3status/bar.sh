@@ -49,9 +49,9 @@ wifi() {
 	echo -n "\"name\":\"id_wifi\","
 
 	if [ -z "${essid}" ]; then
-		echo -n "\"full_text\":\" no connection \","
+		echo -n "\"full_text\":\" no / connection \","
 	else
-		echo -n "\"full_text\":\" $str at $essid \","
+		echo -n "\"full_text\":\" $str / $essid \","
 	fi
 
 	echo -n "\"background\":\"$bg\","
