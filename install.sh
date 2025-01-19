@@ -6,7 +6,7 @@ sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/ya
 
 #OH-MY-ZSH
 yay -S zsh curl
-curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 cp .zshrc ~/.zshrc
 
