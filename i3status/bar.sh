@@ -161,7 +161,7 @@ battery0() {
 volume() {
 	bg="#673AB7"
 	if $(pamixer --get-mute); then
-		bg="#000000"
+		bg="#f00000"
 	fi
 
 	vol=$(pamixer --get-volume)
