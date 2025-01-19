@@ -49,9 +49,9 @@ wifi() {
 	echo -n "\"name\":\"id_wifi\","
 
 	if [ -z "${essid}" ]; then
-		echo -n "\"full_text\":\" no / connection \","
+		echo -n "\"full_text\":\" 󰖪 \","
 	else
-		echo -n "\"full_text\":\" $str / $essid \","
+		echo -n "\"full_text\":\" 󰖩 $str / $essid \","
 	fi
 
 	echo -n "\"background\":\"$bg\","
@@ -64,7 +64,7 @@ wifi() {
 
 disk() {
 	local disk_usage=$(df --output=used,size -BM $1 | tr -dc '\n 0-9' | tail -n 1 | awk '{printf("%.1f", $1/$2 * 100.0)}')
-
+	
 	echo -n ",{"
 	echo -n "\"name\":\"id_disk$1\","
 	echo -n "\"full_text\":\"  $1:$disk_usage% \","
@@ -78,10 +78,20 @@ disk() {
 memory() {
 	local ram=$(free | grep Mem | awk '{printf("%.1f", $3/$2 * 100.0)}')
 
+	bg="#3949AB"
+
+	local overload=$(echo $ram | awk '{print ($1 > 90.0) ? 1 : 0}')
+	if [[ $overload -ne 0 ]]; then
+		bg="#f00000"
+	fi
+
+	echo -n ","
+	separator $bg $bg_prev
+
 	echo -n ",{"
 	echo -n "\"name\":\"id_memory\","
-	echo -n "\"full_text\":\"  $ram%\","
-	echo -n "\"background\":\"#3949AB\","
+	echo -n "\"full_text\":\"  $ram% \","
+	echo -n "\"background\":\"$bg\","
 
 	common
 
@@ -93,15 +103,24 @@ cpu() {
 			sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
 			awk '{print 100 - $1""}'
 	)
+	
+	bg="#3949AB"
+
+	local overload=$(echo $cpu | awk '{print ($1 > 90.0) ? 1 : 0}')
+	if [[ $overload -ne 0 ]]; then
+		bg="#f00000"
+	fi
 
 	echo -n ",{"
 	echo -n "\"name\":\"id_cpu\","
 	echo -n "\"full_text\":\"  $cpu% \","
-	echo -n "\"background\":\"#3949AB\","
+	echo -n "\"background\":\"$bg\","
 
 	common
 
 	echo -n "},"
+
+	bg_prev=$bg
 }
 
 mydate() {
@@ -184,6 +203,29 @@ volume() {
 	bg_prev=$bg
 }
 
+micro() {
+	bg="#673AB7"
+	if $(pamixer --default-source --get-mute); then
+		bg="#f00000"
+	fi
+
+	echo -n "{"
+	echo -n "\"name\":\"id_micro\","
+	if $(pamixer --default-source --get-mute); then
+		echo -n "\"full_text\":\"  \","
+	else
+		echo -n "\"full_text\":\"  \","
+	fi
+	echo -n "\"background\":\"$bg\","
+
+	common
+
+	echo -n "},"
+
+	bg_prev=$bg
+
+}
+
 logout() {
 	bg=$bg_bar
 	separator $bg $bg_prev
@@ -217,16 +259,13 @@ do
 	disk "/"
 	bg_prev=$bg
 
-	bg="#3949AB"
-	echo -n ","
-	separator $bg $bg_prev
 	memory
 	cpu
-	bg_prev=$bg
 
 	battery0
 
 	volume
+	micro
 
 	mydate
 
@@ -258,6 +297,10 @@ do
 	#VOLUME
 	elif [[ $line == *"name"*"id_volume"* ]]; then
 		pactl set-sink-mute @DEFAULT_SINK@ toggle
+	
+	#MICRO
+	elif [[ $line == *"name"*"id_micro"* ]]; then
+		pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 	# TIME
 	elif [[ $line == *"name"*"id_date"* ]]; then
