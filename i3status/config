@@ -1,0 +1,94 @@
+# i3status configuration file.
+# see "man i3status" for documentation.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+#ETHERNET CONNECTION IS NOT PRESENT IN LAPTOP
+
+general {
+        colors = true
+        interval = 5
+}
+
+# order += "ipv6"
+order += "wireless _first_"
+#order += "ethernet _first_"
+order += "battery all"
+order += "disk /"
+order += "disk /mnt/shared"
+order += "disk /home"
+order += "cpu_usage"
+order += "memory"
+order += "volume master"
+#order += "volume mic"
+order += "tztime local"
+
+wireless _first_ {
+        format_up = "󰖩 %quality at %essid"
+        format_down = "󰖪 "
+}
+
+#ethernet _first_ {
+#        format_up = "󰀂 : %ip (%speed)"
+#        format_down = "󰯡 "
+#}
+
+battery all {
+		format = "%status%percentage"
+		format_down = "󱉞 "
+		status_chr = "󰂄 "
+		status_bat = "󰁹 "
+		status_idle = "󰁹 "
+		status_unk = "󰄌 "
+		status_full = "󱈑 "
+		path = "/sys/class/power_supply/BAT%d/uevent"
+		low_threshold = 10
+}
+
+disk "/" {
+		format = "root %used / %total"
+		prefix_type = "custom"
+}
+
+disk "/mnt/shared" {
+		format = "shared %used / %total"
+		prefix_type = "custom"
+}
+
+disk "/home" {
+		format = "home %used / %total"
+		prefix_type = "custom"
+}
+
+cpu_usage {
+		format = "󰍛 %usage"
+		max_threshold = 85
+}
+
+memory {
+		format = " %used"
+        threshold_degraded = "4G"
+		color_degraded = "#bd4a15"
+		format_degraded = " %used"
+}
+
+volume master {
+		format = "󰕾 %volume"
+		format_muted = "󰖁 %volume"
+		device = "pulse"
+		mixer = "Master"
+		mixer_idx = 0
+}
+
+#volume mic {
+#		format = "  %volume"
+#		format_muted = "  "
+#		device = "pulse:alsa_output.pci-0000_03_00.6.analog-stereo.monitor"
+#}
+
+tztime local {
+        format = "%Y-%m-%d %H:%M:%S %Z"
+}
