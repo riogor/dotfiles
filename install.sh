@@ -34,3 +34,5 @@ then
 		sudo cp -r ./nvidia.xorg.conf.d /etc/X11/nvidia.xorg.conf.d
 fi
 
+yay -S ly
+sudo cp ./ly/config.ini /etc/ly/config.ini
