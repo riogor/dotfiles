@@ -63,7 +63,7 @@ wifi() {
 }
 
 disk() {
-	local disk_usage=$(df --output=pcent $1 | tr -dc '0-9')
+	local disk_usage=$(df --output=used,size -BM $1 | tr -dc '\n 0-9' | tail -n 1 | awk '{printf("%.1f", $1/$2 * 100.0)}')
 
 	echo -n ",{"
 	echo -n "\"name\":\"id_disk$1\","
