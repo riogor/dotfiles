@@ -5,6 +5,7 @@ set nocompatible
 set encoding=utf-8
 syntax enable
 set tabstop=4
+set shiftwidth=0
 set number
  
  

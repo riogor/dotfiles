@@ -30,9 +30,21 @@ cp -r ./i3status ~/.config/i3status
 read -p "Copy xorg configuration files (check devices)? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-		sudo cp -r ./xorg.conf.d /etc/X11/xorg.conf.d
-		sudo cp -r ./nvidia.xorg.conf.d /etc/X11/nvidia.xorg.conf.d
+	echo
+	sudo cp -r ./xorg.conf.d /etc/X11/xorg.conf.d
+	sudo cp -r ./nvidia.xorg.conf.d /etc/X11/nvidia.xorg.conf.d
 fi
 
+
+#LY
 yay -S ly
 sudo cp ./ly/config.ini /etc/ly/config.ini
+
+
+#ASUS BATTERY LIMIT
+read -p "Install battery limiter? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	echo
+	sudo bash ./limitd.sh 60
+fi
