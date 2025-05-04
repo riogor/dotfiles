@@ -80,7 +80,7 @@ memory() {
 
 	bg="#3949AB"
 
-	local overload=$(echo $ram | awk '{print ($1 > 90.0) ? 1 : 0}')
+	local overload=$(echo $ram | awk '{print ($1 > 70.0) ? 1 : 0}')
 	if [[ $overload -ne 0 ]]; then
 		bg="#f00000"
 	fi
@@ -106,7 +106,7 @@ cpu() {
 	
 	bg="#3949AB"
 
-	local overload=$(echo $cpu | awk '{print ($1 > 90.0) ? 1 : 0}')
+	local overload=$(echo $cpu | awk '{print ($1 > 50.0) ? 1 : 0}')
 	if [[ $overload -ne 0 ]]; then
 		bg="#f00000"
 	fi
@@ -180,7 +180,7 @@ battery0() {
 volume() {
 	bg="#673AB7"
 	if $(pamixer --get-mute); then
-		bg="#f00000"
+		bg="#000000"
 	fi
 
 	vol=$(pamixer --get-volume)
@@ -206,7 +206,7 @@ volume() {
 micro() {
 	bg="#673AB7"
 	if $(pamixer --default-source --get-mute); then
-		bg="#f00000"
+		bg="#000000"
 	fi
 
 	echo -n "{"
@@ -225,6 +225,55 @@ micro() {
 	bg_prev=$bg
 
 }
+
+player_prev() {
+	bg="#460bb0"
+
+	separator $bg $bg_prev
+
+	echo -n ",{"
+	echo -n "\"name\":\"id_pprev\",\"full_text\":\" 󰒮 \",\"background\":\"$bg\","
+
+	common
+
+	echo -n "},"
+
+	bg_prev=$bg
+}
+
+player_play() {
+	bg="#460bb0"
+
+	echo -n "{"
+	echo -n "\"name\":\"id_pplay\","
+	if [ $(playerctl status) == "Playing" ]; then
+		echo -n "\"full_text\":\" 󰏤 \","
+	else
+		echo -n "\"full_text\":\" 󰐊 \","
+	fi
+
+	echo -n "\"background\":\"$bg\","
+
+	common
+
+	echo -n "},"
+
+	bg_prev=$bg
+}
+
+player_next() {
+	bg="#460bb0"
+
+	echo -n "{"
+	echo -n "\"name\":\"id_pnext\",\"full_text\":\" 󰒭 \",\"background\":\"$bg\","
+
+	common
+
+	echo -n "},"
+
+	bg_prev=$bg
+}
+
 
 logout() {
 	bg=$bg_bar
@@ -267,6 +316,10 @@ do
 	volume
 	micro
 
+	player_prev
+	player_play
+	player_next
+
 	mydate
 
 	logout
@@ -301,6 +354,18 @@ do
 	#MICRO
 	elif [[ $line == *"name"*"id_micro"* ]]; then
 		pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+	#PLAYER PREVIOUS
+	elif [[ $line == *"name"*"id_pprev"* ]]; then
+		playerctl previous
+
+	#PLAYER TOGGLE
+	elif [[ $line == *"name"*"id_pplay"* ]]; then
+		playerctl play-pause
+
+	#PLAYER NEXT
+	elif [[ $line == *"name"*"id_pnext"* ]]; then
+		playerctl next
 
 	# TIME
 	elif [[ $line == *"name"*"id_date"* ]]; then

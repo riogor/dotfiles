@@ -23,16 +23,25 @@ font pango:JetBrains Mono Nerd Font Bold 14
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
 
+# i3 gestures support
+exec_always libinput-gestures-setup start
+
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock -k -p win -n -t -i ~/Pictures/lockscreen.jpg --time-pos="ix:iy-10" --ind-pos="w    /2+205:h/2+10" --radius 142.0 --inside-color=#00000000 --ring-color=#F7F8B266 --keyhl-color=#FFB75499
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock -k -p win -n -t -i ~/Pictures/lockscreen.jpg --time-pos="ix:iy-10" --ind-pos="w    /2+205:h/2+10" --radius 142.0 --inside-color=#00000000 --ring-color=#F7F8B266 --keyhl-color=#FFB75499 --date-str="%a, %d %b" --keylayout 2
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+
+# Blueberry - bluetooth manager in tray
+exec --no-startup-id blueberry-tray
+
+# qpwgraph - pipewire frontend in tray
+exec --no-startup-id qpwgraph -m
 
 # Language switch
 #exec_always --no-startup-id setxkbmap "us,ru" ",winkeys" "grp:alt_shift_toggle"

@@ -18,9 +18,11 @@ cp .vimrc ~/.vimrc
 #I3 & CONFIG
 yay -S i3-wm i3blocks i3status i3-lock-color xss-lock rofi \
 	nm-applet numlockx \
-	pulseaudio brightnessctl \
+	pulseaudio brightnessctl playerctl \
 	feh picom redshift \
-	nautilus alacritty terminator 
+	nautilus alacritty terminator \
+	blueberry-tray \
+	libinput-gestures
 
 cp -r ./i3 ~/.config/i3
 cp -r ./i3status ~/.config/i3status
@@ -35,6 +37,9 @@ then
 	sudo cp -r ./nvidia.xorg.conf.d /etc/X11/nvidia.xorg.conf.d
 fi
 
+
+#LIBINPUT GESTURES
+cp libinput-gestures.conf ~/.config/libinput-gestures.conf
 
 #LY
 yay -S ly
