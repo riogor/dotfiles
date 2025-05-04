@@ -244,12 +244,16 @@ player_prev() {
 player_play() {
 	bg="#460bb0"
 
+	pstatus=$(playerctl status)
+
 	echo -n "{"
 	echo -n "\"name\":\"id_pplay\","
-	if [ $(playerctl status) == "Playing" ]; then
+	if [ "$pstatus" = "Playing" ]; then
 		echo -n "\"full_text\":\" 󰏤 \","
-	else
+	elif [ "$pstatus" = "Paused" ]; then
 		echo -n "\"full_text\":\" 󰐊 \","
+	else
+		echo -n "\"full_text\":\"  \","
 	fi
 
 	echo -n "\"background\":\"$bg\","
@@ -325,7 +329,7 @@ do
 	logout
 
 	echo "]"
-	sleep 5
+	sleep 2
 done) &
 
 # click events
